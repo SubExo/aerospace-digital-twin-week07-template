@@ -3,9 +3,6 @@
   "readiness": {
     "ready": false,
     "missing": [
-      "assumptions",
-      "model",
-      "prediction",
       "verification",
       "claim",
       "reflection",
@@ -14,15 +11,15 @@
     ]
   },
   "record": {
-    "id": "7156c3c3-569c-429b-9425-eca75e9e7bae",
-    "revision": "206",
+    "id": "56b1fbf0-ba96-427c-996d-b5ef1a5027fa",
+    "revision": "69",
     "model": {
       "moduleId": "controls",
       "modelId": "week07-student-model",
       "version": "1.0.0"
     },
-    "modelText": "{\n  \"schemaVersion\": \"week07.student-model/v1\",\n  \"id\": \"week07-student-model\",\n  \"version\": \"1.0.0\",\n  \"slots\": [\n    {\n      \"id\": \"controls.demand\",\n      \"expressions\": [\n        {\n          \"name\": \"requiredMoment\",\n          \"expression\": \"\",\n          \"unit\": \"N*m\"\n        }\n      ]\n    },\n    {\n      \"id\": \"controls.effectiveness\",\n      \"expressions\": [\n        {\n          \"name\": \"dynamicPressure\",\n          \"expression\": \"\",\n          \"unit\": \"Pa\"\n        },\n        {\n          \"name\": \"deltaCm\",\n          \"expression\": \"\",\n          \"unit\": \"1\"\n        },\n        {\n          \"name\": \"deltaMoment\",\n          \"expression\": \"\",\n          \"unit\": \"N*m\"\n        }\n      ]\n    }\n  ]\n}",
-    "modelHash": "fnv1a-adee3cf8",
+    "modelText": "{\n  \"schemaVersion\": \"week07.student-model/v1\",\n  \"id\": \"week07-controls-model\",\n  \"version\": \"1.0.0\",\n  \"slots\": [\n    {\n      \"id\": \"controls.demand\",\n      \"expressions\": [\n        {\n          \"name\": \"requiredMoment\",\n          \"expression\": \"pitchInertia * requestedAcceleration - competingMoment\",\n          \"unit\": \"N*m\"\n        }\n      ]\n    },\n    {\n      \"id\": \"controls.effectiveness\",\n      \"expressions\": [\n        {\n          \"name\": \"dynamicPressure\",\n          \"expression\": \"0.5 * density * airspeed * airspeed\",\n          \"unit\": \"Pa\"\n        },\n        {\n          \"name\": \"deltaCm\",\n          \"expression\": \"elevatorDerivative * elevatorAngle\",\n          \"unit\": \"1\"\n        },\n        {\n          \"name\": \"deltaMoment\",\n          \"expression\": \"dynamicPressure * referenceArea * referenceChord * deltaCm\",\n          \"unit\": \"N*m\"\n        }\n      ]\n    }\n  ]\n}",
+    "modelHash": "fnv1a-be327008",
     "fields": {
       "question": {
         "suppliedBy": "instructor",
@@ -47,7 +44,7 @@
       "assumptions": {
         "suppliedBy": "student",
         "locked": false,
-        "text": ""
+        "text": "Assuming the X-axis goes though the fuselage of the aircraft, out of the nose, the Z-axis goes downwards, towards the ground and the Y-axis protrudes out the the right wing of the aircraft. The rudder and aileron are fixed to ensure there is only rotation about one axis (Y-axis), otherwise known as planar motion. Having either the rudder or aileron be controllable (not fixed) would invalidate the assumption because it allows the aircraft to rotate/move in the other axes. "
       },
       "inputs": {
         "suppliedBy": "instructor",
@@ -57,12 +54,12 @@
       "model": {
         "suppliedBy": "student",
         "locked": false,
-        "text": ""
+        "text": "Demand: Iy*(target-competing)\nDynamic-Pressure coefficient: q_inf = 0.5*rho*V^2\nCm_delta = (moment_delta)/(q_inf*S*c)\ndelta_Cm = (partial_Cm/partial_e_deflection)*e_deflection \n\nQuantities supplied: Iy, target, competing, density(rho), V, S, c, Cm_delta, e_deflection\n\nQuantities unknown: moment_delta, delta_Cm, q_inf"
       },
       "prediction": {
         "suppliedBy": "student",
         "locked": false,
-        "text": ""
+        "text": "The sign of the elevator moment is negative because the tail is pushed down due to the elevator being deflected up. Halving the airspeed will reduce the elevator moment by a factor of 4, due to the velocity being squared in the q_inf equation. The competing moment is the moment opposing the tail/elevator moment in the Y-axis. "
       },
       "execution": {
         "suppliedBy": "automatic",
@@ -93,7 +90,7 @@
   },
   "model": {
     "schemaVersion": "week07.student-model/v1",
-    "id": "week07-student-model",
+    "id": "week07-controls-model",
     "version": "1.0.0",
     "slots": [
       {
@@ -101,7 +98,7 @@
         "expressions": [
           {
             "name": "requiredMoment",
-            "expression": "",
+            "expression": "pitchInertia * requestedAcceleration - competingMoment",
             "unit": "N*m"
           }
         ]
@@ -111,17 +108,17 @@
         "expressions": [
           {
             "name": "dynamicPressure",
-            "expression": "",
+            "expression": "0.5 * density * airspeed * airspeed",
             "unit": "Pa"
           },
           {
             "name": "deltaCm",
-            "expression": "",
+            "expression": "elevatorDerivative * elevatorAngle",
             "unit": "1"
           },
           {
             "name": "deltaMoment",
-            "expression": "",
+            "expression": "dynamicPressure * referenceArea * referenceChord * deltaCm",
             "unit": "N*m"
           }
         ]

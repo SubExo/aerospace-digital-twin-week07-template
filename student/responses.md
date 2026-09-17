@@ -6,13 +6,13 @@ Answers and recorded model results from `submission.json`. This document does no
 
 - Schema: week07.submission/v1
 
-- Record ID: 7156c3c3-569c-429b-9425-eca75e9e7bae
+- Record ID: 56b1fbf0-ba96-427c-996d-b5ef1a5027fa
 
-- Record revision: 206
+- Record revision: 69
 
-- Model hash: fnv1a-adee3cf8
+- Model hash: fnv1a-be327008
 
-- Readiness: Marked incomplete or not ready; missing: assumptions, model, prediction, verification, claim, reflection, aiUse, execution
+- Readiness: Marked incomplete or not ready; missing: verification, claim, reflection, aiUse, execution
 
 ## Supplied setup (instructor supplied)
 
@@ -42,19 +42,32 @@ Downward force in the aft means that there is a force that pushes the tail of th
 **Prompt:** Explain one supplied assumption and what could invalidate it: planar motion, fixed reference, local linear effectiveness, no trim or damping.
 
 **Student response:**
-_Missing — no response supplied._
+```
+Assuming the X-axis goes though the fuselage of the aircraft, out of the nose, the Z-axis goes downwards, towards the ground and the Y-axis protrudes out the the right wing of the aircraft. The rudder and aileron are fixed to ensure there is only rotation about one axis (Y-axis), otherwise known as planar motion. Having either the rudder or aileron be controllable (not fixed) would invalidate the assumption because it allows the aircraft to rotate/move in the other axes. 
+```
 
 ### model
 **Prompt:** Write your demand, dynamic-pressure, coefficient and moment equations. Identify which quantities are supplied and which are unknown.
 
 **Student response:**
-_Missing — no response supplied._
+```
+Demand: Iy*(target-competing)
+Dynamic-Pressure coefficient: q_inf = 0.5*rho*V^2
+Cm_delta = (moment_delta)/(q_inf*S*c)
+delta_Cm = (partial_Cm/partial_e_deflection)*e_deflection 
+
+Quantities supplied: Iy, target, competing, density(rho), V, S, c, Cm_delta, e_deflection
+
+Quantities unknown: moment_delta, delta_Cm, q_inf
+```
 
 ### prediction
 **Prompt:** Before running your own implementation, predict the sign of its elevator moment and the effect of halving airspeed. Explain the competing moment.
 
 **Student response:**
-_Missing — no response supplied._
+```
+The sign of the elevator moment is negative because the tail is pushed down due to the elevator being deflected up. Halving the airspeed will reduce the elevator moment by a factor of 4, due to the velocity being squared in the q_inf equation. The competing moment is the moment opposing the tail/elevator moment in the Y-axis. 
+```
 
 ### verification
 **Prompt:** Show one independent hand calculation with units. Compare it with your model, and explain a sign, unit, or limiting-case check.
@@ -87,7 +100,7 @@ The recorded model JSON/expression source follows exactly as supplied. It is not
 ```
 {
   "schemaVersion": "week07.student-model/v1",
-  "id": "week07-student-model",
+  "id": "week07-controls-model",
   "version": "1.0.0",
   "slots": [
     {
@@ -95,7 +108,7 @@ The recorded model JSON/expression source follows exactly as supplied. It is not
       "expressions": [
         {
           "name": "requiredMoment",
-          "expression": "",
+          "expression": "pitchInertia * requestedAcceleration - competingMoment",
           "unit": "N*m"
         }
       ]
@@ -105,17 +118,17 @@ The recorded model JSON/expression source follows exactly as supplied. It is not
       "expressions": [
         {
           "name": "dynamicPressure",
-          "expression": "",
+          "expression": "0.5 * density * airspeed * airspeed",
           "unit": "Pa"
         },
         {
           "name": "deltaCm",
-          "expression": "",
+          "expression": "elevatorDerivative * elevatorAngle",
           "unit": "1"
         },
         {
           "name": "deltaMoment",
-          "expression": "",
+          "expression": "dynamicPressure * referenceArea * referenceChord * deltaCm",
           "unit": "N*m"
         }
       ]
