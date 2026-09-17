@@ -8,11 +8,11 @@ Answers and recorded model results from `submission.json`. This document does no
 
 - Record ID: 56b1fbf0-ba96-427c-996d-b5ef1a5027fa
 
-- Record revision: 69
+- Record revision: 373
 
 - Model hash: fnv1a-be327008
 
-- Readiness: Marked incomplete or not ready; missing: verification, claim, reflection, aiUse, execution
+- Readiness: Marked incomplete or not ready; missing: claim, reflection, aiUse
 
 ## Supplied setup (instructor supplied)
 
@@ -51,7 +51,7 @@ Assuming the X-axis goes though the fuselage of the aircraft, out of the nose, t
 
 **Student response:**
 ```
-Demand: Iy*(target-competing)
+Demand: Iy*target-competing
 Dynamic-Pressure coefficient: q_inf = 0.5*rho*V^2
 Cm_delta = (moment_delta)/(q_inf*S*c)
 delta_Cm = (partial_Cm/partial_e_deflection)*e_deflection 
@@ -73,7 +73,18 @@ The sign of the elevator moment is negative because the tail is pushed down due 
 **Prompt:** Show one independent hand calculation with units. Compare it with your model, and explain a sign, unit, or limiting-case check.
 
 **Student response:**
-_Missing — no response supplied._
+```
+Required control moment: Iy*target-competing
+
+Iy = 5000kgm^2
+competing = -750Nm
+target = 0.12 rad/s^2
+
+Demand: 5000*0.12-(-750) = 1350Nm
+
+
+
+```
 
 ### claim
 **Prompt:** What do your computed results support at the stated condition? Include a limitation.
@@ -143,7 +154,18 @@ No verification record was supplied.
 
 ## Recorded model runs
 
-_Missing — no model runs supplied._
+### Run 1
+- Recorded: 2026-09-17T04:12:43.818Z
+- Run ID: 490f5418-30a5-4126-bb03-9455eda60e32
+- Record revision: 69
+- Model hash recorded with run: fnv1a-be327008
+- Prediction recorded with run:
+
+```
+The sign of the elevator moment is negative because the tail is pushed down due to the elevator being deflected up. Halving the airspeed will reduce the elevator moment by a factor of 4, due to the velocity being squared in the q_inf equation. The competing moment is the moment opposing the tail/elevator moment in the Y-axis. 
+```
+- Result status: recorded values shown below
+- Values: `requiredMoment=1350 N*m`; `dynamicPressure=980 Pa`; `deltaCm=0.06981317007977318 1`; `deltaMoment=1642.0057602762652 N*m`
 
 ## Submission instructions
 
